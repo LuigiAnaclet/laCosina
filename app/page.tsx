@@ -6,7 +6,7 @@ type Menu = {
   entree: Plat[];
   plat: Plat[];
   dessert: Plat[];
-  boisson: string[];
+  boisson: Plat[];
 };
 
 export default function HomePage() {
