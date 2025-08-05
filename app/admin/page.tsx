@@ -1,7 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-
+const router = useRouter();
+useEffect(() => {
+  if (sessionStorage.getItem('admin-auth') !== 'true') {
+    router.push('/admin/login');
+  }
+}, []);
 export default function AdminPage() {
   const [form, setForm] = useState({
     name: '',
