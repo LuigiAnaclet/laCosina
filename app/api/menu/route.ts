@@ -20,5 +20,24 @@ export async function GET() {
   }
 
   console.log('✅ Connexion à Supabase réussie. Données récupérées :', data);
-  return NextResponse.json(data[0]); // retourne le premier menu
+
+  // 🔁 Grouper les données par type
+  const grouped = {
+    entree: [] as any[],
+    plat: [] as any[],
+    dessert: [] as any[],
+    boisson: [] as any[],
+  };
+
+  for (const item of data) {
+    const type = item.type as keyof typeof grouped;
+    if (grouped[type]) {
+      grouped[type].push({
+        nom: item.name,
+        description: item.description || '',
+      });
+    }
+  }
+
+  return NextResponse.json(grouped);
 }
