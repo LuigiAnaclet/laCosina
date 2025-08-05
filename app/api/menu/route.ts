@@ -9,10 +9,6 @@ export async function GET() {
     .select('*')
     .order('created_at', { ascending: true });
 
-  console.log('🧪 Résultat brut Supabase :', JSON.stringify(data));
-  console.log('Data:', data);
-  console.log('Error:', error);
-
 
   if (error) {
     console.error('❌ Erreur de connexion ou requête Supabase échouée :', error.message);
@@ -23,8 +19,6 @@ export async function GET() {
     console.warn('⚠️ Connexion réussie, mais aucune donnée dans la table `menu`');
     return NextResponse.json({ error: 'Aucune donnée trouvée' }, { status: 404 });
   }
-
-  console.log('✅ Connexion à Supabase réussie. Données récupérées :', data);
 
   // 🔁 Grouper les données par type
   const grouped = {
@@ -65,6 +59,7 @@ export async function POST(req: Request) {
 
   return NextResponse.json({ success: true });
 }
+
 
 
 
