@@ -3,9 +3,9 @@ import { Client } from 'pg';
 
 export async function GET() {
   const client = new Client({
-    connectionString: process.env.DATABASE_URL, // ⚠️ on va mettre cette URL dans Vercel
+    connectionString: process.env.DATABASE_URL,
     ssl: {
-      rejectUnauthorized: false // Supabase exige une connexion SSL
+      rejectUnauthorized: false 
     }
   });
 
