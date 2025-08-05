@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-type Plat = { nom: string; description: string };
+type Plat = { name: string; description: string };
 type Menu = {
   entree: Plat[];
   plat: Plat[];
@@ -28,7 +28,7 @@ export default function HomePage() {
         <h2 className="text-xl font-semibold mt-4">Entrées :</h2>
         {menu.entree.map((e, i) => (
           <div key={i} className="mb-2">
-            <h3 className="font-medium">{e.nom}</h3>
+            <h3 className="font-medium">{e.name}</h3>
             <p>{e.description}</p>
           </div>
         ))}
@@ -38,7 +38,7 @@ export default function HomePage() {
         <h2 className="text-xl font-semibold mt-4">Plats :</h2>
         {menu.plat.map((p, i) => (
           <div key={i} className="mb-2">
-            <h3 className="font-medium">{p.nom}</h3>
+            <h3 className="font-medium">{p.name}</h3>
             <p>{p.description}</p>
           </div>
         ))}
@@ -48,7 +48,7 @@ export default function HomePage() {
         <h2 className="text-xl font-semibold mt-4">Desserts :</h2>
         {menu.dessert.map((d, i) => (
           <div key={i} className="mb-2">
-            <h3 className="font-medium">{d.nom}</h3>
+            <h3 className="font-medium">{d.name}</h3>
             <p>{d.description}</p>
           </div>
         ))}
