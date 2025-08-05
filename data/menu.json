@@ -1,0 +1,16 @@
+{
+  "entrees": [
+    {
+      "nom": "Salade de chèvre chaud",
+      "description": "Toasts grillés et salade verte"
+    }
+  ],
+  "plats": [
+    { "nom": "Colombo de poulet", "description": "Poulet mariné aux épices" }
+  ],
+  "desserts": [
+    { "nom": "Flan coco", "description": "Dessert sucré à la noix de coco" },
+    { "nom": "Flan banane", "description": "Dessert sucré à la noix de banane" }
+  ],
+  "boissons": ["Eau", "Jus de goyave", "Ti-punch"]
+}
