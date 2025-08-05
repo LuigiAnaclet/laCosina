@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 
 type Plat = { nom: string; description: string };
 type Menu = {
-  entrees: Plat[];
-  plats: Plat[];
-  desserts: Plat[];
-  boissons: string[];
+  entree: Plat[];
+  plat: Plat[];
+  dessert: Plat[];
+  boisson: string[];
 };
 
 export default function HomePage() {
@@ -26,7 +26,7 @@ export default function HomePage() {
 
       <section>
         <h2 className="text-xl font-semibold mt-4">Entrées :</h2>
-        {menu.entrees.map((e, i) => (
+        {menu.entree.map((e, i) => (
           <div key={i} className="mb-2">
             <h3 className="font-medium">{e.nom}</h3>
             <p>{e.description}</p>
@@ -36,7 +36,7 @@ export default function HomePage() {
 
       <section>
         <h2 className="text-xl font-semibold mt-4">Plats :</h2>
-        {menu.plats.map((p, i) => (
+        {menu.plat.map((p, i) => (
           <div key={i} className="mb-2">
             <h3 className="font-medium">{p.nom}</h3>
             <p>{p.description}</p>
@@ -46,7 +46,7 @@ export default function HomePage() {
 
       <section>
         <h2 className="text-xl font-semibold mt-4">Desserts :</h2>
-        {menu.desserts.map((d, i) => (
+        {menu.dessert.map((d, i) => (
           <div key={i} className="mb-2">
             <h3 className="font-medium">{d.nom}</h3>
             <p>{d.description}</p>
@@ -57,7 +57,7 @@ export default function HomePage() {
       <section>
         <h2 className="text-xl font-semibold mt-4">Boissons :</h2>
         <ul className="list-disc pl-5">
-          {menu.boissons.map((b, i) => (
+          {menu.boisson.map((b, i) => (
             <li key={i}>{b}</li>
           ))}
         </ul>
