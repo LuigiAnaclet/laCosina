@@ -55,13 +55,14 @@ export default function HomePage() {
       </section>
 
       <section>
-        <h2 className="text-xl font-semibold mt-4">Boissons :</h2>
-        <ul className="list-disc pl-5">
-          {menu.boisson.map((b, i) => (
-            <li key={i}>{b}</li>
-          ))}
-        </ul>
-      </section>
+      <h2 className="text-xl font-semibold mt-4">Boissons :</h2>
+      {menu.boisson.map((b, i) => (
+        <div key={i} className="mb-2">
+          <h3 className="font-medium">{b.name}</h3>
+          <p>{b.description || ''}</p>
+        </div>
+      ))}
+    </section>
     </div>
   );
 }
