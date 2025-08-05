@@ -38,7 +38,7 @@ export async function GET() {
     const type = item.type as keyof typeof grouped;
     if (grouped[type]) {
       grouped[type].push({
-        nom: item.name,
+        name: item.name,
         description: item.description || '',
       });
     }
@@ -46,6 +46,7 @@ export async function GET() {
 
   return NextResponse.json(grouped);
 }
+
 
 
 
