@@ -47,6 +47,27 @@ export async function GET() {
   return NextResponse.json(grouped);
 }
 
+export async function POST(req: Request) {
+  const body = await req.json();
+
+  const { name, description, type } = body;
+
+  if (!name || !type) {
+    return NextResponse.json({ error: 'Champs requis manquants' }, { status: 400 });
+  }
+
+  const { error } = await supabase.from('menu').insert([{ name, description, type }]);
+
+  if (error) {
+    console.error('Erreur insertion Supabase :', error.message);
+    return NextResponse.json({ error: 'Erreur insertion' }, { status: 500 });
+  }
+
+  return NextResponse.json({ success: true });
+}
+
+
+
 
 
 
