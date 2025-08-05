@@ -10,6 +10,9 @@ export async function GET() {
     .order('created_at', { ascending: true });
 
   console.log('🧪 Résultat brut Supabase :', JSON.stringify(data));
+  console.log('Data:', data);
+  console.log('Error:', error);
+
 
   if (error) {
     console.error('❌ Erreur de connexion ou requête Supabase échouée :', error.message);
@@ -43,6 +46,7 @@ export async function GET() {
 
   return NextResponse.json(grouped);
 }
+
 
 
 
