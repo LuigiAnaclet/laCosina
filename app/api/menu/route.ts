@@ -9,6 +9,8 @@ export async function GET() {
     .select('*')
     .order('created_at', { ascending: true });
 
+  console.log('🧪 Résultat brut Supabase :', JSON.stringify(data));
+
   if (error) {
     console.error('❌ Erreur de connexion ou requête Supabase échouée :', error.message);
     return NextResponse.json({ error: 'Erreur de récupération depuis Supabase' }, { status: 500 });
@@ -41,3 +43,4 @@ export async function GET() {
 
   return NextResponse.json(grouped);
 }
+
