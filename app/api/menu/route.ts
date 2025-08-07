@@ -2,9 +2,25 @@ import { supabase } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET() {
-  const { data, error } = await supabase.from('menu').select('*').order('type').order('id');
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  
+  console.log('📡 Tentative de connexion à Supabase...');
+
+  const { data, error } = await supabase
+    .from('menu')
+    .select('*')
+    .order('created_at', { ascending: true });
+
+
+  if (error) {
+    console.error('❌ Erreur de connexion ou requête Supabase échouée :', error.message);
+    return NextResponse.json({ error: 'Erreur de récupération depuis Supabase' }, { status: 500 });
+  }
+
+  if (!data || data.length === 0) {
+    console.warn('⚠️ Connexion réussie, mais aucune donnée dans la table `menu`');
+    return NextResponse.json({ error: 'Aucune donnée trouvée' }, { status: 404 });
+  }
+
+  // 🔁 Grouper les données par type
   const grouped = {
     entree: [] as any[],
     plat: [] as any[],
@@ -22,7 +38,7 @@ export async function GET() {
     }
   }
 
-  return NextResponse.json(data);
+  return NextResponse.json(grouped);
 }
 
 export async function POST(req: NextRequest) {
@@ -48,5 +64,6 @@ export async function DELETE(req: NextRequest) {
 
   return NextResponse.json({ success: true });
 }
+
 
 
