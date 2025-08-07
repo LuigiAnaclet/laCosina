@@ -2,7 +2,12 @@
 
 import { useEffect, useState } from 'react';
 
-type Plat = { name: string; description: string };
+type Plat = {
+  id: number;
+  name: string;
+  description: string;
+  type: 'entree' | 'plat' | 'dessert' | 'boisson';
+};
 type Menu = {
   entree: Plat[];
   plat: Plat[];
