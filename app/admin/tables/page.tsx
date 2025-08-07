@@ -4,7 +4,11 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function TableAdminPage() {
-  const [tables, setTables] = useState<{ numero: number }[]>([]);
+  type Table = {
+  id: number;
+  numero: number;
+  };
+  const [tables, setTables] = useState<Table[]>([]);
   const [password, setPassword] = useState('');
   const [auth, setAuth] = useState(false);
   const [error, setError] = useState('');
