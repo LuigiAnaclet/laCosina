@@ -54,6 +54,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
+  export async function DELETE(req: NextRequest) {
   const { id, password } = await req.json();
 
   if (password !== process.env.ADMIN_SECRET)
@@ -64,6 +65,17 @@ export async function DELETE(req: NextRequest) {
 
   return NextResponse.json({ success: true });
 }
+  const { id, password } = await req.json();
+
+  if (password !== process.env.ADMIN_SECRET)
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const { error } = await supabase.from('menu').delete().eq('id', id);
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  return NextResponse.json({ success: true });
+}
+
 
 
 
