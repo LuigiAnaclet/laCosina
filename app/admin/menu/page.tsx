@@ -63,13 +63,15 @@ export default function AdminMenuPage() {
     fetchMenu();
   };
 
-  const grouped = {
-    entree: [] as Plat[],
-    plat: [] as Plat[],
-    dessert: [] as Plat[],
-    boisson: [] as Plat[],
-  };
-  menu.forEach((p) => grouped[p.type].push(p));
+  type Menu = {
+  entree: Plat[];
+  plat: Plat[];
+  dessert: Plat[];
+  boisson: Plat[];
+};
+
+const [menu, setMenu] = useState<Menu | null>(null);
+
 
   if (!auth) {
     return (
@@ -124,9 +126,8 @@ export default function AdminMenuPage() {
           ➕ Ajouter au menu
         </button>
       </div>
-
-      {/* Affichage par catégorie */}
-      {Object.entries(grouped).map(([type, items]) => (
+      
+      {Object.entries(menu).map(([type, items]) => (
         <div key={type} className="mb-6">
           <h2 className="text-xl font-semibold capitalize mb-2">{type}s :</h2>
           <ul className="space-y-2">
