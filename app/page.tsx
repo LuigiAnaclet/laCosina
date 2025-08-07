@@ -40,12 +40,11 @@ export default function HomePage() {
 
       {/* Section dynamique par type */}
       {Object.entries(menu).map(([key, plats]) => {
-        if (!(key in sectionConfig)) return null;
         const section = sectionConfig[key as keyof Menu];
         return (
           <section key={key} className="mb-10">
             <h2 className="text-2xl font-bold text-center mb-4 text-gray-700">
-              {section.emoji} {section.title}
+               {section.title}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {(plats as Plat[]).map((item, i) => (
