@@ -1,3 +1,4 @@
+
 'use client';
 import { useEffect, useState } from 'react';
 
@@ -44,7 +45,7 @@ export default function HomePage() {
         return (
           <section key={key} className="mb-10">
             <h2 className="text-2xl font-bold text-center mb-4 text-gray-700">
-               {section.title}
+              {section.emoji} {section.title}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {(plats as Plat[]).map((item, i) => (
