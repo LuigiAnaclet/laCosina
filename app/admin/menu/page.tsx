@@ -8,9 +8,16 @@ type Plat = {
   description: string;
   type: 'entree' | 'plat' | 'dessert' | 'boisson';
 };
+type Menu = {
+  entree: Plat[];
+  plat: Plat[];
+  dessert: Plat[];
+  boisson: Plat[];
+};
+
 
 export default function AdminMenuPage() {
-  const [menu, setMenu] = useState<Plat[]>([]);
+  const [menu, setMenu] = useState<Menu | null>(null);
   const [form, setForm] = useState({ name: '', description: '', type: 'plat' });
   const [password, setPassword] = useState('');
   const [auth, setAuth] = useState(false);
