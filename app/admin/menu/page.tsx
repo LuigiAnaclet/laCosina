@@ -120,7 +120,8 @@ export default function AdminMenuPage() {
         </button>
       </div>
       
-      {Object.entries(menu).map(([type, items]) => (
+      {menu &&
+        Object.entries(menu).map(([type, items]) => (
         <div key={type} className="mb-6">
           <h2 className="text-xl font-semibold capitalize mb-2">{type}s :</h2>
           <ul className="space-y-2">
