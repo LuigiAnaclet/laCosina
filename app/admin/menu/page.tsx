@@ -8,13 +8,13 @@ type Plat = {
   description: string;
   type: 'entree' | 'plat' | 'dessert' | 'boisson';
 };
+
 type Menu = {
   entree: Plat[];
   plat: Plat[];
   dessert: Plat[];
   boisson: Plat[];
 };
-
 
 export default function AdminMenuPage() {
   const [menu, setMenu] = useState<Menu | null>(null);
@@ -52,24 +52,35 @@ export default function AdminMenuPage() {
   };
 
   const handleAdd = async () => {
-    await fetch('/api/menu', {
+    const res = await fetch('/api/menu', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...form, password })
     });
+
+    if (!res.ok) {
+      alert('Erreur ajout');
+      return;
+    }
+
     setForm({ name: '', description: '', type: 'plat' });
     fetchMenu();
   };
 
   const handleDelete = async (id: number) => {
-    await fetch('/api/menu', {
+    const res = await fetch('/api/menu', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id })
+      body: JSON.stringify({ id, password })
     });
+
+    if (!res.ok) {
+      alert('Erreur suppression');
+      return;
+    }
+
     fetchMenu();
   };
-
 
   if (!auth) {
     return (
@@ -124,29 +135,29 @@ export default function AdminMenuPage() {
           ➕ Ajouter au menu
         </button>
       </div>
-      
+
       {menu &&
         Object.entries(menu).map(([type, items]) => (
-        <div key={type} className="mb-6">
-          <h2 className="text-xl font-semibold capitalize mb-2">{type}s :</h2>
-          <ul className="space-y-2">
-            {items.map((item) => (
-              <li
-                key={item.id}
-                className="flex justify-between items-center bg-white p-2 border rounded shadow"
-              >
-                <div>
-                  <p className="font-semibold">{item.name}</p>
-                  <p className="text-sm text-gray-500">{item.description}</p>
-                </div>
-                <button onClick={() => handleDelete(item.id)} className="text-red-500">
-                  Supprimer
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+          <div key={type} className="mb-6">
+            <h2 className="text-xl font-semibold capitalize mb-2">{type}s :</h2>
+            <ul className="space-y-2">
+              {items.map((item) => (
+                <li
+                  key={item.id}
+                  className="flex justify-between items-center bg-white p-2 border rounded shadow"
+                >
+                  <div>
+                    <p className="font-semibold">{item.name}</p>
+                    <p className="text-sm text-gray-500">{item.description}</p>
+                  </div>
+                  <button onClick={() => handleDelete(item.id)} className="text-red-500">
+                    Supprimer
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
     </div>
   );
 }
