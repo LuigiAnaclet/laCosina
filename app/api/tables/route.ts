@@ -1,6 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
+export async function GET() {
+  const { data, error } = await supabase.from('tables').select('*').order('numero', { ascending: true });
+
+  if (error) {
+    console.error('Erreur récupération tables :', error);
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
+  }
+
+  return NextResponse.json(data);
+}
+
 export async function POST(req: NextRequest) {
   const { password } = await req.json();
 
