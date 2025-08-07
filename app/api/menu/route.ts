@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET() {
   const { data, error } = await supabase.from('menu').select('*').order('type').order('id');
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  
   const grouped = {
     entree: [] as any[],
     plat: [] as any[],
@@ -47,4 +48,5 @@ export async function DELETE(req: NextRequest) {
 
   return NextResponse.json({ success: true });
 }
+
 
