@@ -40,6 +40,7 @@ export default function HomePage() {
 
       {/* Section dynamique par type */}
       {Object.entries(menu).map(([key, plats]) => {
+        if (!(key in sectionConfig)) return null;
         const section = sectionConfig[key as keyof Menu];
         return (
           <section key={key} className="mb-10">
