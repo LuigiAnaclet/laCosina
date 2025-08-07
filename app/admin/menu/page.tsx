@@ -63,15 +63,6 @@ export default function AdminMenuPage() {
     fetchMenu();
   };
 
-  type Menu = {
-  entree: Plat[];
-  plat: Plat[];
-  dessert: Plat[];
-  boisson: Plat[];
-};
-
-const [menu, setMenu] = useState<Menu | null>(null);
-
 
   if (!auth) {
     return (
