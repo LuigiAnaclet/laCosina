@@ -4,6 +4,23 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET() {
   const { data, error } = await supabase.from('menu').select('*').order('type').order('id');
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  const grouped = {
+    entree: [] as any[],
+    plat: [] as any[],
+    dessert: [] as any[],
+    boisson: [] as any[],
+  };
+
+  for (const item of data) {
+    const type = item.type as keyof typeof grouped;
+    if (grouped[type]) {
+      grouped[type].push({
+        name: item.name,
+        description: item.description || '',
+      });
+    }
+  }
+
   return NextResponse.json(data);
 }
 
@@ -30,3 +47,4 @@ export async function DELETE(req: NextRequest) {
 
   return NextResponse.json({ success: true });
 }
+
