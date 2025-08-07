@@ -65,7 +65,7 @@ export default function AdminMenuPage() {
     await fetch('/api/menu', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, password })
+      body: JSON.stringify({ id })
     });
     fetchMenu();
   };
