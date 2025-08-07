@@ -92,7 +92,7 @@ export default function TableAdminPage() {
             key={t.id}
             className="flex items-center justify-between bg-white p-3 rounded shadow border"
           >
-            <span>🪑 Table {t.id}</span>
+            <span>🪑 Table {t.numero}</span>
             <button
               onClick={() => deleteTable(t.id)}
               className="text-red-500 hover:text-red-700"
