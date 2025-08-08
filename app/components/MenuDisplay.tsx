@@ -19,14 +19,7 @@ const sectionConfig = {
 
 export default function MenuDisplay({ menu, tableId, withCart = false }: any) {
   const [cart, setCart] = useState<any[]>([]);
-  //const [menu, setMenu] = useState<Menu | null>(null);
-
-  useEffect(() => {
-    fetch('/api/menu')
-      .then((res) => res.json())
-      .then((data) => setMenu(data));
-  }, []);
-
+  
   const addToCart = (item: any) => {
     setCart([...cart, item]);
   };
