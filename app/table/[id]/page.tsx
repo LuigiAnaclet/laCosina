@@ -1,87 +1,46 @@
 
-'use client';
+import { notFound } from 'next/navigation';
+import { createClient } from '@/utils/supabase/server';
+import { Metadata } from 'next';
+import { cookies } from 'next/headers';
+import { MenuDisplay } from '@/components/MenuDisplay';
 
-import { useEffect, useState } from 'react';
+export const dynamicParams = false;
 
-type MenuItem = {
-  id: number;
-  name: string;
-  description: string;
-  type: string;
-};
+export async function generateStaticParams() {
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
 
-type Menu = {
-  [key: string]: MenuItem[];
-};
+  const { data, error } = await supabase.from('tables').select('id');
 
-export default function TablePage({ params }: { params: { id: string } }) {
-  const [menu, setMenu] = useState<Menu>({});
-  const [cart, setCart] = useState<MenuItem[]>([]);
+  if (error || !data) return [];
 
-  useEffect(() => {
-    fetch('/api/menu')
-      .then(res => res.json())
-      .then(data => setMenu(data));
-  }, []);
+  return data.map((table: { id: number }) => ({
+    id: table.id.toString(),
+  }));
+}
 
-  const addToCart = (item: MenuItem) => {
-    setCart(prev => [...prev, item]);
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  return {
+    title: `Menu - Table ${params.id}`,
   };
+}
 
-  const removeFromCart = (index: number) => {
-    setCart(prev => prev.filter((_, i) => i !== index));
-  };
+export default async function TableMenuPage({ params }: { params: { id: string } }) {
+  const { id } = params;
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+
+  const { data: menu, error } = await supabase.from('menu').select('*');
+
+  if (!menu || error) {
+    return notFound();
+  }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Table {params.id}</h1>
-
-      <div className="grid md:grid-cols-2 gap-6">
-        <div>
-          {Object.entries(menu).map(([type, items]) => (
-            <div key={type} className="mb-6">
-              <h2 className="text-xl font-semibold capitalize mb-2">{type}s</h2>
-              <ul className="space-y-2">
-                {items.map(item => (
-                  <li key={item.id} className="bg-white p-3 shadow rounded flex justify-between items-center">
-                    <div>
-                      <p className="font-medium">{item.name}</p>
-                      <p className="text-sm text-gray-600">{item.description}</p>
-                    </div>
-                    <button
-                      onClick={() => addToCart(item)}
-                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-                    >
-                      Ajouter
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        <div className="bg-gray-100 p-4 rounded shadow">
-          <h2 className="text-xl font-bold mb-3">🧺 Panier</h2>
-          {cart.length === 0 ? (
-            <p className="text-gray-500">Votre panier est vide.</p>
-          ) : (
-            <ul className="space-y-2">
-              {cart.map((item, index) => (
-                <li key={index} className="bg-white p-2 flex justify-between items-center rounded">
-                  <span>{item.name}</span>
-                  <button
-                    onClick={() => removeFromCart(index)}
-                    className="text-red-500 hover:text-red-700 text-sm"
-                  >
-                    Supprimer
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
-    </div>
+    <main className="max-w-4xl mx-auto py-10 px-4 space-y-6">
+      <h1 className="text-3xl font-bold mb-6">Menu - Table {id}</h1>
+      <MenuDisplay menu={menu} tableId={id} withCart />
+    </main>
   );
 }
