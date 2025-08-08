@@ -31,10 +31,12 @@ export default function AdminMenuPage() {
   }, []);
 
   const fetchMenu = async () => {
-    const res = await fetch('/api/menu');
-    const data = await res.json();
-    setMenu(data);
-  };
+  const res = await fetch('/api/menu');
+  const data = await res.json();
+  console.log("Données reçues :", data);
+  setMenu(data);
+};
+
 
   const login = async () => {
     const res = await fetch('/api/admin/check', {
@@ -68,12 +70,14 @@ export default function AdminMenuPage() {
   };
 
   const handleDelete = async (id: number) => {
+  console.log("Tentative de suppression id:", id, "avec mot de passe:", password);
   const res = await fetch(`/api/menu?id=${id}&password=${password}`, {
     method: 'DELETE',
   });
 
   if (!res.ok) {
-    alert('Erreur suppression');
+    const error = await res.text();
+    alert('Erreur suppression: ' + error);
     return;
   }
 
