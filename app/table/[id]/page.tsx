@@ -1,14 +1,12 @@
 import { notFound } from 'next/navigation';
-import { createClient } from '@/lib/supabase';
+import { createSupabaseServerClient } from '@/lib/supabase-server';
 import { Metadata } from 'next';
-import { cookies } from 'next/headers';
 import MenuDisplay from '../../components/MenuDisplay';
 
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createSupabaseServerClient();
 
   const { data, error } = await supabase.from('tables').select('id');
 
@@ -27,8 +25,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 
 export default async function TableMenuPage({ params }: { params: { id: string } }) {
   const { id } = params;
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = createSupabaseServerClient();
 
   const { data: menu, error } = await supabase.from('menu').select('*');
 
