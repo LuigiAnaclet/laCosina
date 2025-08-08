@@ -19,7 +19,7 @@ const sectionConfig = {
 
 export default function MenuDisplay({ menu, tableId, withCart = false }: any) {
   const [cart, setCart] = useState<any[]>([]);
-  const [menu, setMenu] = useState<Menu | null>(null);
+  //const [menu, setMenu] = useState<Menu | null>(null);
 
   useEffect(() => {
     fetch('/api/menu')
