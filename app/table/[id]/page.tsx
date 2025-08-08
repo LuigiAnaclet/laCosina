@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, notFound } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import MenuDisplay from '@/components/MenuDisplay';
+import MenuDisplay from '../../components/MenuDisplay';
 
 type MenuItem = {
   id: number;
