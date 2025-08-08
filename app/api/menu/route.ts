@@ -61,24 +61,28 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const id = Number(searchParams.get('id'));
+  const id = searchParams.get('id');
   const password = searchParams.get('password');
+
+  if (!id || !password) {
+    return NextResponse.json({ error: 'Missing id or password' }, { status: 400 });
+  }
 
   if (password !== process.env.ADMIN_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  if (!id) {
-    return NextResponse.json({ error: 'Missing id' }, { status: 400 });
-  }
+  const { error } = await supabase
+    .from('menu')
+    .delete()
+    .eq('id', Number(id)); // Convertir string vers number
 
-  const { error } = await supabase.from('menu').delete().eq('id', id);
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   return NextResponse.json({ success: true });
 }
+
+
 
 
 
