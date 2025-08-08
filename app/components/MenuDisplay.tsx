@@ -1,6 +1,5 @@
-
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 type Plat = { name: string; description: string };
 type Menu = {
@@ -19,7 +18,7 @@ const sectionConfig = {
 
 export default function MenuDisplay({ menu, tableId, withCart = false }: any) {
   const [cart, setCart] = useState<any[]>([]);
-  
+
   const addToCart = (item: any) => {
     setCart([...cart, item]);
   };
@@ -37,7 +36,6 @@ export default function MenuDisplay({ menu, tableId, withCart = false }: any) {
         🎊 Menu du jour 🎊
       </h1>
 
-      {/* Section dynamique par type */}
       {Object.entries(menu).map(([key, plats]) => {
         const section = sectionConfig[key as keyof Menu];
         return (
@@ -54,12 +52,12 @@ export default function MenuDisplay({ menu, tableId, withCart = false }: any) {
                   <h3 className="text-lg font-semibold">{item.name}</h3>
                   <p className="text-sm text-gray-600 mt-1">{item.description}</p>
                   {withCart && (
-                  <button
-                    className="text-blue-500 text-sm mt-1"
-                    onClick={() => addToCart(item)}
-                  >
-                    Ajouter au panier
-                  </button>
+                    <button
+                      className="text-blue-500 text-sm mt-1"
+                      onClick={() => addToCart(item)}
+                    >
+                      Ajouter au panier
+                    </button>
                   )}
                 </div>
               ))}
