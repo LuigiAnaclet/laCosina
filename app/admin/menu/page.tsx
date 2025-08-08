@@ -68,19 +68,18 @@ export default function AdminMenuPage() {
   };
 
   const handleDelete = async (id: number) => {
-    const res = await fetch('/api/menu', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, password })
-    });
+  const res = await fetch(`/api/menu?id=${id}&password=${password}`, {
+    method: 'DELETE',
+  });
 
-    if (!res.ok) {
-      alert('Erreur suppression');
-      return;
-    }
+  if (!res.ok) {
+    alert('Erreur suppression');
+    return;
+  }
 
-    fetchMenu();
-  };
+  fetchMenu();
+};
+
 
   if (!auth) {
     return (
