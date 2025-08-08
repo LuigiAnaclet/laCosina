@@ -1,13 +1,7 @@
 'use client';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
-type Plat = { name: string; description: string };
-type Menu = {
-  entree: Plat[];
-  plat: Plat[];
-  dessert: Plat[];
-  boisson: Plat[];
-};
+type Plat = { name: string; description: string; type: string };
 
 const sectionConfig = {
   entree: { emoji: '🥗', color: 'bg-green-100 border-green-400', title: 'Entrées' },
@@ -16,19 +10,37 @@ const sectionConfig = {
   boisson: { emoji: '🍹', color: 'bg-blue-100 border-blue-400', title: 'Boissons' }
 };
 
-export default function MenuDisplay({ menu, tableId, withCart = false }: any) {
-  const [cart, setCart] = useState<any[]>([]);
+export default function MenuDisplay({
+  menu,
+  tableId,
+  withCart = false
+}: {
+  menu: Plat[];
+  tableId: string;
+  withCart?: boolean;
+}) {
+  const [cart, setCart] = useState<Plat[]>([]);
 
-  const addToCart = (item: any) => {
+  const menuGrouped = useMemo(() => {
+    const grouped: Record<string, Plat[]> = {};
+    menu.forEach((item) => {
+      if (!grouped[item.type]) grouped[item.type] = [];
+      grouped[item.type].push(item);
+    });
+    return grouped;
+  }, [menu]);
+
+  const addToCart = (item: Plat) => {
     setCart([...cart, item]);
   };
 
-  if (!menu)
+  if (!menu || menu.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center text-center text-xl text-white bg-gradient-to-br from-yellow-200 via-red-100 to-pink-200">
-        Chargement du menu... 🎉
+        Aucun plat disponible... 🍽️
       </div>
     );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-100 via-orange-50 to-pink-100 px-4 py-6 font-sans text-gray-800">
@@ -36,15 +48,17 @@ export default function MenuDisplay({ menu, tableId, withCart = false }: any) {
         🎊 Menu du jour 🎊
       </h1>
 
-      {Object.entries(menu).map(([key, plats]) => {
-        const section = sectionConfig[key as keyof Menu];
+      {Object.entries(menuGrouped).map(([key, plats]) => {
+        const section = sectionConfig[key as keyof typeof sectionConfig];
+        if (!section) return null;
+
         return (
           <section key={key} className="mb-10">
             <h2 className="text-2xl font-bold text-center mb-4 text-gray-700">
               {section.emoji} {section.title}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {(plats as Plat[]).map((item, i) => (
+              {plats.map((item, i) => (
                 <div
                   key={i}
                   className={`rounded-xl border-l-4 ${section.color} shadow-sm p-4`}
