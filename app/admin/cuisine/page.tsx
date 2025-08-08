@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 type Plat = {
   id: number;
-  nom: string;
+  name: string;
   numero: number;
   created_at: string;
 };
@@ -79,7 +79,7 @@ export default function CuisineAdminPage() {
                   className="border p-3 rounded bg-white shadow-sm flex justify-between items-center"
                 >
                   <div>
-                    <p className="text-lg font-semibold">{plat.nom}</p>
+                    <p className="text-lg font-semibold">{plat.name}</p>
                     <p className="text-sm text-gray-500">
                       Table {plat.numero} ·{' '}
                       {new Date(plat.created_at).toLocaleTimeString()}
