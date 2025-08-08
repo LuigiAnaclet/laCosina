@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -31,12 +32,10 @@ export default function AdminMenuPage() {
   }, []);
 
   const fetchMenu = async () => {
-  const res = await fetch('/api/menu');
-  const data = await res.json();
-  console.log("Données reçues :", data);
-  setMenu(data);
-};
-
+    const res = await fetch('/api/menu');
+    const data = await res.json();
+    setMenu(data);
+  };
 
   const login = async () => {
     const res = await fetch('/api/admin/check', {
@@ -70,20 +69,19 @@ export default function AdminMenuPage() {
   };
 
   const handleDelete = async (id: number) => {
-  console.log("Tentative de suppression id:", id, "avec mot de passe:", password);
-  const res = await fetch(`/api/menu?id=${id}&password=${password}`, {
-    method: 'DELETE',
-  });
+    const res = await fetch('/api/menu', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, password })
+    });
 
-  if (!res.ok) {
-    const error = await res.text();
-    alert('Erreur suppression: ' + error);
-    return;
-  }
+    if (!res.ok) {
+      alert('Erreur suppression');
+      return;
+    }
 
-  fetchMenu();
-};
-
+    fetchMenu();
+  };
 
   if (!auth) {
     return (
