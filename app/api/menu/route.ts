@@ -1,5 +1,11 @@
 import { supabase } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export async function GET() {
   console.log('📡 Tentative de connexion à Supabase...');
@@ -54,12 +60,26 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const { id } = await req.json();
+  try {
+    const { id } = await req.json();
 
-  const { error } = await supabase.from('menu').delete().eq('id', id);
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (!id) {
+      return NextResponse.json({ error: 'ID manquant' }, { status: 400 });
+    }
 
-  return NextResponse.json({ success: true });
+    const { error } = await supabaseAdmin.from('menu').delete().eq('id', id);
+
+    if (error) {
+      console.error('Erreur Supabase :', error.message);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (err: any) {
+    console.error('Erreur serveur :', err.message);
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
+  }
 }
+
 
 
