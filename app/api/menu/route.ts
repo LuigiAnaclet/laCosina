@@ -60,26 +60,27 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  try {
-    const { id } = await req.json();
+  const { searchParams } = new URL(req.url);
+  const id = Number(searchParams.get('id'));
+  const password = searchParams.get('password');
 
-    if (!id) {
-      return NextResponse.json({ error: 'ID manquant' }, { status: 400 });
-    }
-
-    const { error } = await supabaseAdmin.from('menu').delete().eq('id', id);
-
-    if (error) {
-      console.error('Erreur Supabase :', error.message);
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    return NextResponse.json({ success: true });
-  } catch (err: any) {
-    console.error('Erreur serveur :', err.message);
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
+  if (password !== process.env.ADMIN_SECRET) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+
+  if (!id) {
+    return NextResponse.json({ error: 'Missing id' }, { status: 400 });
+  }
+
+  const { error } = await supabase.from('menu').delete().eq('id', id);
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ success: true });
 }
+
+
 
 
 
