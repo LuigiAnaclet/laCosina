@@ -24,11 +24,11 @@ export default function TablePage() {
 
   useEffect(() => {
     const checkTableAndFetchMenu = async () => {
-      // Vérifie si la table existe
+      // Vérifie si une table avec ce numero existe
       const { data: tables, error: tableError } = await supabase.from('tables').select('numero');
 
       if (tableError || !tables) {
-        console.error('Erreur de vérification des tables', tableError?.message);
+        console.error('Erreur récupération tables :', tableError?.message);
         setValidTable(false);
         return;
       }
@@ -58,8 +58,8 @@ export default function TablePage() {
 
       setMenu(grouped);
 
-      // Récupère le panier s'il existe
-      const savedCart = localStorage.getItem(`cart-table-${numero}`);
+      // Panier local
+      const savedCart = localStorage.getItem(`cart-table-${id}`);
       if (savedCart) setCart(JSON.parse(savedCart));
     };
 
@@ -69,18 +69,17 @@ export default function TablePage() {
   const addToCart = (item: MenuItem) => {
     const updatedCart = [...cart, item];
     setCart(updatedCart);
-    localStorage.setItem(`cart-table-${numero}`, JSON.stringify(updatedCart));
+    localStorage.setItem(`cart-table-${id}`, JSON.stringify(updatedCart));
   };
 
   const removeFromCart = (itemId: number) => {
     const updatedCart = cart.filter((item) => item.id !== itemId);
     setCart(updatedCart);
-    localStorage.setItem(`cart-table-${numero}`, JSON.stringify(updatedCart));
+    localStorage.setItem(`cart-table-${id}`, JSON.stringify(updatedCart));
   };
 
-  // Redirection si table invalide
   if (validTable === false) {
-    notFound(); // déclare une page 404 automatiquement
+    notFound();
   }
 
   if (validTable === null) {
@@ -89,7 +88,7 @@ export default function TablePage() {
 
   return (
     <main className="max-w-4xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Menu - Table {numero}</h1>
+      <h1 className="text-2xl font-bold mb-4">Menu - Table {id}</h1>
 
       <MenuDisplay menu={menu} onAddToCart={addToCart} />
 
