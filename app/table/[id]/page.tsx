@@ -1,4 +1,4 @@
-
+'use client';
 import { notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { Metadata } from 'next';
