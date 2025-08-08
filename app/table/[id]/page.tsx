@@ -111,6 +111,27 @@ export default function TablePage() {
             ))}
           </ul>
         )}
+            <button
+      onClick={async () => {
+        const res = await fetch('/api/cuisine', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ numero: id, items: cart }),
+        });
+    
+        if (res.ok) {
+          alert('Commande envoyée en cuisine 🍽️');
+          setCart([]);
+          localStorage.removeItem(`cart-table-${id}`);
+        } else {
+          const err = await res.json();
+          alert('Erreur : ' + err.error);
+        }
+      }}
+      className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+    >
+      Valider la commande
+    </button>
       </div>
     </main>
   );
