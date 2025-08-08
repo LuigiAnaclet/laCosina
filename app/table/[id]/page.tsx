@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase';
 import { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { MenuDisplay } from '@/components/MenuDisplay';
