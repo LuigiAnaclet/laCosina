@@ -67,6 +67,7 @@ export default function MenuDisplay({ menu, tableId, withCart = false }: any) {
                   >
                     Ajouter au panier
                   </button>
+                  )}
                 </div>
               ))}
             </div>
