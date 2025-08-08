@@ -1,11 +1,5 @@
 import { supabase } from '@/lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 export async function GET() {
   console.log('📡 Tentative de connexion à Supabase...');
@@ -38,6 +32,7 @@ export async function GET() {
     const type = item.type as keyof typeof grouped;
     if (grouped[type]) {
       grouped[type].push({
+        id: item.id,
         name: item.name,
         description: item.description || '',
       });
@@ -60,31 +55,14 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const id = searchParams.get('id');
-  const password = searchParams.get('password');
+  
+  const { id, password } = await req.json();
 
-  if (!id || !password) {
-    return NextResponse.json({ error: 'Missing id or password' }, { status: 400 });
-  }
-
-  if (password !== process.env.ADMIN_SECRET) {
+  if (password !== process.env.ADMIN_SECRET)
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
 
-  const { error } = await supabase
-    .from('menu')
-    .delete()
-    .eq('id', Number(id)); // Convertir string vers number
-
+  const { error } = await supabase.from('menu').delete().eq('id', id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   return NextResponse.json({ success: true });
 }
-
-
-
-
-
-
-
