@@ -40,10 +40,11 @@ export async function GET() {
 }
 
 export async function PATCH(req: NextRequest) {
-  const { id, etat } = await req.json();
+  const { id, etat, password } = await req.json();
 
-  if (!id || !etat) {
-    return NextResponse.json({ error: 'Requête invalide' }, { status: 400 });
+  // Utiliser la clé d'admin du .env
+  if (password !== process.env.ADMIN_SECRET) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   const { error } = await supabase
@@ -57,4 +58,3 @@ export async function PATCH(req: NextRequest) {
 
   return NextResponse.json({ success: true });
 }
-
