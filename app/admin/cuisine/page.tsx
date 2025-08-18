@@ -49,7 +49,7 @@ export default function CuisineAdminPage() {
       body: JSON.stringify({ id, etat }),
     });
     const data = await res.json();
-    if (!data.error) fetchItems();
+    if (!data.error) fetchPlats();
   };
 
   const fetchPlats = async () => {
