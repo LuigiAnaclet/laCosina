@@ -101,15 +101,15 @@ export default function CuisineAdminPage() {
                   <button
                 onClick={() =>
                   handleEtatChange(
-                    plats.id,
-                    plats.etat === "en préparation" ? "fait" : "en préparation"
+                    plat.id,
+                    plat.etat === "en préparation" ? "fait" : "en préparation"
                   )
                 }
                 className={`px-4 py-2 rounded text-white ${
-                  plats.etat === "en préparation" ? "bg-orange-500" : "bg-green-600"
+                  plat.etat === "en préparation" ? "bg-orange-500" : "bg-green-600"
                 }`}
               >
-                Marquer comme {plats.etat === "en préparation" ? "fait" : "en préparation"}
+                Marquer comme {plat.etat === "en préparation" ? "fait" : "en préparation"}
               </button>
                 </li>
               ))}
