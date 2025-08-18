@@ -42,14 +42,10 @@ export default function CuisineAdminPage() {
   };
 
   const handleEtatChange = async (id: number, nouvelEtat: string) => {
-    const adminPassword = sessionStorage.getItem("admin-auth");
-  
     const res = await fetch("/api/cuisine", {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id, etat: nouvelEtat, password: adminPassword }),
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ id, etat: nouvelEtat, password: password }),
     });
   
     const data = await res.json();
