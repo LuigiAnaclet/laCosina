@@ -29,6 +29,7 @@ export async function GET() {
   const { data, error } = await supabase
     .from('cuisine')
     .select('*')
+    .eq('etat', 'en préparation')
     .order('created_at', { ascending: true });
 
   if (error) {
