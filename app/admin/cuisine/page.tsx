@@ -42,23 +42,25 @@ export default function CuisineAdminPage() {
   };
 
   const handleEtatChange = async (id: number, nouvelEtat: string) => {
+    const adminPassword = sessionStorage.getItem("admin-auth");
+  
     const res = await fetch("/api/cuisine", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id, etat: nouvelEtat, password }),
+      body: JSON.stringify({ id, etat: nouvelEtat, password: adminPassword }),
     });
   
     const data = await res.json();
   
     if (data.success) {
-      // Recharge la liste des plats
       fetchPlats();
     } else {
       console.error("Erreur lors du changement d'état :", data.error);
     }
   };
+
 
 
   const fetchPlats = async () => {
