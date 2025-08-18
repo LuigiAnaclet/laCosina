@@ -41,17 +41,25 @@ export default function CuisineAdminPage() {
     }
   };
 
-  const handleEtatChange = async (id: number, etat: string) => {
+  const handleEtatChange = async (id: number, nouvelEtat: string) => {
     const res = await fetch("/api/cuisine", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id, etat }),
+      body: JSON.stringify({ id, etat: nouvelEtat, password }),
     });
+  
     const data = await res.json();
-    if (!data.error) fetchPlats();
+  
+    if (data.success) {
+      // Recharge la liste des plats
+      fetchPlats();
+    } else {
+      console.error("Erreur lors du changement d'état :", data.error);
+    }
   };
+
 
   const fetchPlats = async () => {
     const res = await fetch('/api/cuisine');
