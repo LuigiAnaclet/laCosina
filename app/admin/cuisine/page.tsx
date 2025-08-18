@@ -15,6 +15,7 @@ export default function CuisineAdminPage() {
   const [password, setPassword] = useState('');
   const [auth, setAuth] = useState(false);
   const [error, setError] = useState('');
+  const adminPassword = process.env.ADMIN_SECRET!;
 
   useEffect(() => {
     if (sessionStorage.getItem('admin-auth') === 'true') {
