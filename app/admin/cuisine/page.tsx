@@ -40,6 +40,18 @@ export default function CuisineAdminPage() {
     }
   };
 
+  const handleEtatChange = async (id: number, etat: string) => {
+    const res = await fetch("/api/cuisine", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, etat }),
+    });
+    const data = await res.json();
+    if (!data.error) fetchItems();
+  };
+
   const fetchPlats = async () => {
     const res = await fetch('/api/cuisine');
     const data = await res.json();
