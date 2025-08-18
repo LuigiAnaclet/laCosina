@@ -1,30 +1,44 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from 'react';
+
+type Plat = {
+  id: number;
+  name: string;
+  numero: number;
+  etat: text;
+  created_at: string;
+};
 
 export default function CuisineAdminPage() {
-  const [items, setItems] = useState<any[]>([]);
-  const [password, setPassword] = useState("");
-  const [isAuthorized, setIsAuthorized] = useState(false);
-  const router = useRouter();
+  const [plats, setPlats] = useState<Plat[]>([]);
+  const [password, setPassword] = useState('');
+  const [auth, setAuth] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    if (isAuthorized) {
-      fetchItems();
-      const interval = setInterval(fetchItems, 5000);
+    if (sessionStorage.getItem('admin-auth') === 'true') {
+      setAuth(true);
+      fetchPlats();
+      const interval = setInterval(fetchPlats, 5000);
       return () => clearInterval(interval);
     }
-  }, [isAuthorized]);
+  }, []);
 
-  const fetchItems = async () => {
-    const res = await fetch("/api/cuisine", {
-      headers: {
-        Authorization: password,
-      },
+  const login = async () => {
+    const res = await fetch('/api/admin/check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
     });
-    const data = await res.json();
-    if (!data.error) setItems(data);
+
+    if (res.ok) {
+      sessionStorage.setItem('admin-auth', 'true');
+      setAuth(true);
+      fetchPlats();
+    } else {
+      setError('Mot de passe incorrect');
+    }
   };
 
   const handleEtatChange = async (id: number, etat: string) => {
@@ -36,73 +50,73 @@ export default function CuisineAdminPage() {
       body: JSON.stringify({ id, etat }),
     });
     const data = await res.json();
-    if (!data.error) fetchItems();
+    if (!data.error) fetchPlats();
   };
 
-  const handleLogin = () => {
-    if (password === process.env.NEXT_PUBLIC_ADMIN_SECRET) {
-      setIsAuthorized(true);
-    } else {
-      alert("Mot de passe incorrect");
-    }
+  const fetchPlats = async () => {
+    const res = await fetch('/api/cuisine');
+    const data = await res.json();
+    setPlats(data);
   };
-
-  if (!isAuthorized) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <h1 className="text-2xl mb-4">Accès cuisine protégé</h1>
-        <input
-          type="password"
-          placeholder="Mot de passe admin"
-          className="border px-4 py-2 mb-2"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button
-          onClick={handleLogin}
-          className="bg-green-600 text-white px-4 py-2 rounded"
-        >
-          Se connecter
-        </button>
-      </div>
-    );
-  }
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Cuisine - Commandes en cours</h1>
-      {items.length === 0 ? (
-        <p className="text-gray-500">Aucune commande pour le moment.</p>
+    <main className="max-w-3xl mx-auto p-4">
+      {!auth ? (
+        <div className="flex flex-col items-center justify-center min-h-screen px-4">
+          <h1 className="text-2xl font-bold mb-4">Connexion admin 🔐</h1>
+          <input
+            type="password"
+            placeholder="Mot de passe admin"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border p-2 rounded w-full max-w-sm mb-2"
+          />
+          <button
+            onClick={login}
+            className="bg-black text-white px-4 py-2 rounded"
+          >
+            Se connecter
+          </button>
+          {error && <p className="text-red-600 mt-2">{error}</p>}
+        </div>
       ) : (
-        <ul className="space-y-4">
-          {items.map((item) => (
-            <li
-              key={item.id}
-              className="border rounded p-4 flex justify-between items-center"
-            >
-              <div>
-                <p className="text-lg font-semibold">{item.nom}</p>
-                <p className="text-sm text-gray-500">
-                  Table n° {item.numero} | {item.etat}
-                </p>
-              </div>
-              <button
+        <>
+          <h1 className="text-2xl font-bold mb-4">👨‍🍳 Plats à préparer</h1>
+          {plats.length === 0 ? (
+            <p className="text-gray-600">Aucune commande en attente.</p>
+          ) : (
+            <ul className="space-y-3">
+              {plats.map((plat) => (
+                <li
+                  key={plat.id}
+                  className="border p-3 rounded bg-white shadow-sm flex justify-between items-center"
+                >
+                  <div>
+                    <p className="text-lg font-semibold">{plat.name}</p>
+                    <p className="text-sm text-gray-500">
+                      Table {plat.numero} ·{' '}
+                      {new Date(plat.created_at).toLocaleTimeString()}
+                    </p>
+                  </div>
+                  <button
                 onClick={() =>
                   handleEtatChange(
-                    item.id,
-                    item.etat === "en préparation" ? "fait" : "en préparation"
+                    plats.id,
+                    plats.etat === "en préparation" ? "fait" : "en préparation"
                   )
                 }
                 className={`px-4 py-2 rounded text-white ${
-                  item.etat === "en préparation" ? "bg-orange-500" : "bg-green-600"
+                  plats.etat === "en préparation" ? "bg-orange-500" : "bg-green-600"
                 }`}
               >
-                Marquer comme {item.etat === "en préparation" ? "fait" : "en préparation"}
+                Marquer comme {plats.etat === "en préparation" ? "fait" : "en préparation"}
               </button>
-            </li>
-          ))}
-        </ul>
+                </li>
+              ))}
+            </ul>
+          )}
+        </>
       )}
-    </div>
+    </main>
   );
 }
