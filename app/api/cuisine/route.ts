@@ -41,7 +41,7 @@ export async function GET() {
 
 export async function PATCH(req: NextRequest) {
   const { id, etat, password } = await req.json();
-  console.log(req.json());
+  console.log(password);
 
   // Utiliser la clé d'admin du .env
   if (password !== process.env.ADMIN_SECRET) {
