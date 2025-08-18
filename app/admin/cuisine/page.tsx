@@ -85,7 +85,19 @@ export default function CuisineAdminPage() {
                       {new Date(plat.created_at).toLocaleTimeString()}
                     </p>
                   </div>
-                  {/* 🔜 Plus tard : bouton valider */}
+                  <button
+                onClick={() =>
+                  handleEtatChange(
+                    item.id,
+                    item.etat === "en préparation" ? "fait" : "en préparation"
+                  )
+                }
+                className={`px-4 py-2 rounded text-white ${
+                  item.etat === "en préparation" ? "bg-orange-500" : "bg-green-600"
+                }`}
+              >
+                Marquer comme {item.etat === "en préparation" ? "fait" : "en préparation"}
+              </button>
                 </li>
               ))}
             </ul>
