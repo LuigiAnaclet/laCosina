@@ -6,7 +6,7 @@ type Plat = {
   id: number;
   name: string;
   numero: number;
-  etat: text;
+  etat: string;
   created_at: string;
 };
 
