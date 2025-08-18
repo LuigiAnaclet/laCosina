@@ -12,6 +12,7 @@ export async function POST(req: NextRequest) {
   const payload = items.map((item: any) => ({
     name: item.name,
     numero,
+    etat: 'en préparation',
     created_at: new Date().toISOString(),
   }));
 
@@ -36,3 +37,23 @@ export async function GET() {
 
   return NextResponse.json(data);
 }
+
+export async function PATCH(req: NextRequest) {
+  const { id, etat } = await req.json();
+
+  if (!id || !etat) {
+    return NextResponse.json({ error: 'Requête invalide' }, { status: 400 });
+  }
+
+  const { error } = await supabase
+    .from('cuisine')
+    .update({ etat })
+    .eq('id', id);
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ success: true });
+}
+
