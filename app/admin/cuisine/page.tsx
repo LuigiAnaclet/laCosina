@@ -35,18 +35,20 @@ export default function CuisineAdminPage() {
 
     if (res.ok) {
       sessionStorage.setItem('admin-auth', 'true');
+      sessionStorage.setItem('admin-password', password);
       setAuth(true);
       fetchPlats();
-    } else {
+  }else {
       setError('Mot de passe incorrect');
     }
   };
 
   const handleEtatChange = async (id: number, nouvelEtat: string) => {
+    const storedPassword = sessionStorage.getItem('admin-password');
     const res = await fetch("/api/cuisine", {
       method: "PATCH",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ id, etat: nouvelEtat, password: adminPassword }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, etat: nouvelEtat, password: storedPassword }), 
     });
   
     const data = await res.json();
