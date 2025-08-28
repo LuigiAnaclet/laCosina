@@ -42,18 +42,30 @@ export async function GET() {
 export async function PATCH(req: NextRequest) {
   const { id, etat, password } = await req.json();
 
-  console.log("PATCH cuisine:", { id, etat, password });
+  console.log('PATCH cuisine:', { id, etat, password });
 
-  if (password !== process.env.ADMIN_SECRET)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  // Protection avec mot de passe
+  if (password !== process.env.ADMIN_SECRET) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
-  const { error } = await supabase
-    .from("cuisine")
+  // Requête de mise à jour
+  const { data, error } = await supabase
+    .from('cuisine')
     .update({ etat })
-    .eq("id", id);
+    .eq('id', id)
+    .select(); // Pour voir si une ligne a été touchée
 
-  if (error)
+  if (error) {
+    console.error('Erreur UPDATE Supabase:', error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 
+  if (!data || data.length === 0) {
+    console.warn('Aucune ligne mise à jour pour id =', id);
+    return NextResponse.json({ error: 'Aucune ligne mise à jour' }, { status: 404 });
+  }
+
+  console.log('Mise à jour réussie pour ID:', id);
   return NextResponse.json({ success: true });
 }
