@@ -41,21 +41,19 @@ export async function GET() {
 
 export async function PATCH(req: NextRequest) {
   const { id, etat, password } = await req.json();
-  //console.log(password);
 
-  // Utiliser la clé d'admin du .env
-  if (password !== process.env.ADMIN_SECRET) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  console.log("PATCH cuisine:", { id, etat, password });
+
+  if (password !== process.env.ADMIN_SECRET)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { error } = await supabase
-    .from('cuisine')
+    .from("cuisine")
     .update({ etat })
-    .eq('id', id);
+    .eq("id", id);
 
-  if (error) {
+  if (error)
     return NextResponse.json({ error: error.message }, { status: 500 });
-  }
 
   return NextResponse.json({ success: true });
 }
