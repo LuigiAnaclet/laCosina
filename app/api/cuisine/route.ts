@@ -41,6 +41,7 @@ export async function GET() {
 
 export async function PATCH(req: NextRequest) {
   const { id, etat, password } = await req.json();
+  console.log('Type etat :', typeof etat, JSON.stringify(etat));
 
   console.log('PATCH cuisine:', { id, etat, password });
 
